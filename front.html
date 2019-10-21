@@ -12,6 +12,9 @@
 <div class="container">
     <h1 class="display-3 text-center">WASM Fuzzing Platform</h1>
 
+    <br>
+    <br>
+
     <table class="table table-striped">
         <thead>
         <tr>
@@ -48,6 +51,31 @@
     <div style="text-align:center">
         <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">文件上传</button>
     </div>
+
+    <br>
+    <br>
+
+    <div class="row">
+        <div class="col-lg-6" >
+            <div class="card" style="max-width: 95%; margin: auto; overflow: auto; max-height: 600px">
+                <div class="card-header">Origin</div>
+                <div class="card-body">
+                    <h4 class="card-title"></h4>
+                    <pre id="ori_code"></pre>
+                </div>
+            </div>
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+            <div class="card" style="max-width: 95%; margin: auto; overflow: auto; max-height: 600px">
+                <div class="card-header">Modified</div>
+                <div class="card-body">
+                    <h4 class="card-title"></h4>
+                    <pre id="cur_code"></pre>
+                </div>
+            </div>
+        </div><!-- /.col-lg-6 -->
+    </div><!-- /.row -->
+
     <!-- 模态框（Modal） -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -77,26 +105,39 @@
     function uploadfile() {
         let reads = new FileReader();
         let file = document.getElementById('file').files[0];
-        reads.readAsText(file, 'utf-8');
+        let code = reads.readAsText(file, 'utf-8');
         alert("已添加文件" + file.name);
+        reads.onload = function()
+        {
+            document.getElementById("ori_code").innerHTML = this.result.blink();
+        }
+        console.log(reads.result);
+        document.getElementById("ori_code").innerText = "code";
     }
 
     /*附件上传*/
     function UpladFile() {
-        let fileObj = document.getElementById("file").files[0]; // 获取文件对象
-        let FileController = "http://127.0.0.1:5000/data/";     // 接收上传文件的后台地址
-        // FormData 对象
+        let file_obj = document.getElementById("file").files[0];    // 获取文件对象
+        let url = "http://127.0.0.1:5000/data/";    // 接收上传文件的后台地址
         let form = new FormData();
-        /*form.append("name", "tom");  */                      // 可以增加表单数据
-        form.append("file", fileObj);                           // 文件对象
+        form.append("file", file_obj)
         // XMLHttpRequest 对象
         let xhr = new XMLHttpRequest();
-        console.log(FileController);
-        xhr.open("POST", FileController, true);
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", 'application/json');
         xhr.send(form);
-        alert("上传完成！")
-        console.log(xhr.response);
+        alert("上传完成");
+        // 该属性每次变化时会触发
+        xhr.onreadystatechange = function () {
+            //若响应完成且请求成功
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let json = JSON.parse(xhr.responseText);
+                document.getElementById("cur_code").innerHTML = json["content"];
+                console.log(json)
+            }
+        }
     }
+
 </script>
 
 <!-- jQuery library -->
