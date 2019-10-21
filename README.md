@@ -15,7 +15,7 @@ A presentation platform for wasm fuzzing
 - Upload the file(`*.wasm`, `*.wast`)
 - return the origin result, modified result
 
-### Exist problem
+### Exist problems
 - [x] ~~Backend highlighting~~
   - <font color=996996>Front-end regular expression matching</font>
   ```
