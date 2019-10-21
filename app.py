@@ -25,7 +25,7 @@ def receive_code():
     # Judge empty
     if not request.data:
         print('receive data is empty')
-        resp = {'srrmsg': 'file is empty!'}
+        resp = {'status': 'fail', 'content': '[File is empty!]'}
         return resp
     recv_data = request.data.decode('utf-8')
 
@@ -42,17 +42,24 @@ def receive_code():
     end_index = recv_data.index('------WebKitFormBoundary')
     recv_data = recv_data[:end_index]
     suffix = '.wast'
-    newfile = './data/' + name.split('.')[0] + suffix
-    if not os.path.exists(newfile):
-        f = open(newfile, 'w')
+    if name.split('.')[1] != 'wast' and name.split('.')[1] != 'wasm':
+        resp = {'status': 'fail', 'content': '[The file type does not match!]'}
+        return resp
+    file = './data/' + name.split('.')[0] + suffix
+    newfile = './data/' + name.split('.')[0] + 'new' + suffix
+    if not os.path.exists(file):
+        f = open(file, 'w')
         f.write(recv_data)
         f.close()
-        print(newfile + ' created.')
+        print(file + ' created.')
     else:
-        print(newfile + ' already existed.')
+        print(file + ' already existed.')
 
-    # Command
-    # os.system('~/webassembly/spec/interpreter/wasm %s -o %s' % (newfile, newfile + 'new'))
+    # Command    
+    status = os.system('~/webassembly/spec/interpreter/wasm %s -o %s' % (file, newfile))
+    if status != 0:
+        resp = {'status': 'fail', 'content': '[WASM interpreter running error!]'}
+        return resp
 
     # resp = make_response('OK')  # 请求处理成功后，返回'OK'到html中显示
     # resp.headers['Access-Control-Allow-Origin'] = '*'
@@ -61,10 +68,11 @@ def receive_code():
     f = open(newfile, 'r')
     tmp_content = f.readlines()
     content = ''.join(tmp_content)
+    print(content)
     f.close()
-    resp = {'msg': 'success', 'content': content}
+    resp = {'status': 'success', 'content': content}
     return resp
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='wasm.eveneko.com', port=5000, debug=True)

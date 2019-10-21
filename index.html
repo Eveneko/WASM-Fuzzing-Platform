@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>WASM Fuzzing Platform</title>
+    <link rel="shortcut icon" href="images/logo.ico">
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -19,7 +20,7 @@
         <thead>
         <tr>
             <th>Virtual Machine Name</th>
-            <th>riginal Output</th>
+            <th>Original Output</th>
             <th>After Mutation</th>
         </tr>
         </thead>
@@ -88,7 +89,7 @@
                 <div class="modal-body">
                     <form id="upload-form" enctype="multipart/form-data">
                         <input id='file' class="btn btn-info" name="upload_file" type="file"
-                               accept=".wast,.wasm,.js,.py" onchange="uploadfile()">
+                               accept=".wast,.wasm" onchange="uploadfile()">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -118,7 +119,7 @@
     /*附件上传*/
     function UpladFile() {
         let file_obj = document.getElementById("file").files[0];    // 获取文件对象
-        let url = "http://127.0.0.1:5000/data/";    // 接收上传文件的后台地址
+        let url = "http://wasm.eveneko.com:5000/data/";    // 接收上传文件的后台地址
         let form = new FormData();
         form.append("file", file_obj)
         // XMLHttpRequest 对象
@@ -132,8 +133,14 @@
             //若响应完成且请求成功
             if (xhr.readyState === 4 && xhr.status === 200) {
                 let json = JSON.parse(xhr.responseText);
-                document.getElementById("cur_code").innerHTML = json["content"];
+                console.log(json.content)
+                console.log(typeof(json.content))
+                content = json.content.replace(new RegExp("\\(unreachable\\)", "g"), "<font color=\"#000000\" style=\"background:yellow\">(unreachable)</font>");
+                document.getElementById("cur_code").innerHTML = content;
                 console.log(json)
+            }
+            else{
+                document.getElementById("cur_code").innerHTML = '[Unknown Error!]'
             }
         }
     }
