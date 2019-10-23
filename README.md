@@ -1,6 +1,6 @@
 # WASM-Fuzzing-Platform
 A presentation platform for wasm fuzzing
-site: [http://wasm.sustech.com](http://wasm.sustech.com)
+site: [http://wasm.eveneko.com](http://wasm.eveneko.com)
 
 ## Pyramid version
 
