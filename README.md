@@ -8,7 +8,7 @@ site: [http://wasm.eveneko.com](http://wasm.eveneko.com)
 - Python 3.6.8
 - Pyramid 1.10.4
 
-### Struct
+### File Structure
 ```
 .  
 ├── __pycache__  
@@ -38,7 +38,7 @@ site: [http://wasm.eveneko.com](http://wasm.eveneko.com)
 - Flask 1.1.1
 - Werkzeug 0.16.0
 
-### Struct
+### File Structure
 ```
 .  
 ├── app.py  
