@@ -1,0 +1,17 @@
+(module
+  (type $0 (func (param f32 f32) (result f32)))
+  (type $1 (func (result i32)))
+  (memory $0 1)
+  (func $0
+    (type 0)
+    (unreachable)
+    (unreachable)
+    (unreachable)
+    (unreachable)
+    (unreachable)
+  )
+  (func $1 (type 1) (i32.const 0))
+  (export "memory" (memory 0))
+  (export "one" (func 0))
+  (export "main" (func 1))
+)

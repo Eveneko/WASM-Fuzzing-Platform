@@ -93,8 +93,9 @@
         /*附件上传*/
         function uploadFile() {
             let file_obj = document.getElementById("file").files[0]; // 获取文件对象
-            let url = "http://wasm.eveneko.com:6543/upload"; // 接收上传文件的后台地址
+            let url = "http://wasm.eveneko.com/upload"; // 接收上传文件的后台地址
             let form = new FormData();
+            form.append("filename", file_obj.name);
             form.append("file", file_obj);
             // XMLHttpRequest 对象
             let xhr = new XMLHttpRequest();
